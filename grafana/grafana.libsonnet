@@ -300,11 +300,18 @@ function(params) {
       else
         [{ name: 'GF_INSTALL_PLUGINS', value: std.join(',', g._config.plugins) }]
     );
+    
+    local pluginUrls = (
+      if std.length(g._config.pluginUrls) == 0 then
+        []
+      else
+        [{ name: 'GF_PLUGIN_URL', value: std.join(',', g._config.pluginUrls) }]
+    );
 
     local grafanaContainer = {
       name: 'grafana',
       image: g._config.image,
-      env: g._config.env + plugins,
+      env: g._config.env + plugins + pluginUrls,
       volumeMounts: volumeMounts,
       ports: [{
         name: 'http',
